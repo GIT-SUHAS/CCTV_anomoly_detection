@@ -1,0 +1,37 @@
+Project Roadmap: CCTV Anomaly Detection
+
+    [ ] Phase 1: Data Acquisition
+
+        Select a benchmark dataset (UCSD Pedestrian, CUHK Avenue, or UCF-Crime).
+
+        Perform frame extraction and resize to a uniform dimension (e.g., 224x224).
+
+        Apply pixel normalization and background subtraction.
+
+    [ ] Phase 2: Feature Engineering
+
+        Extract Spatial Features using a pre-trained CNN (ResNet/VGG).
+
+        Calculate Temporal Features using Optical Flow to track motion.
+
+    [ ] Phase 3: Model Architecture
+
+        Implement a Conv-LSTM Autoencoder for unsupervised learning.
+
+        Train specifically on "normal" behavior sequences.
+
+    [ ] Phase 4: Pattern Recognition Logic
+
+        Calculate Reconstruction Error for incoming frames.
+
+        Set a dynamic threshold using a Gaussian Mixture Model (GMM).
+
+        Apply temporal smoothing to reduce false alarms.
+
+    [ ] Phase 5: Evaluation & Deployment
+
+        Measure performance using AUC-ROC and Precision-Recall curves.
+
+       Optimize for Real-Time processing (aim for 15+ FPS).
+
+        Generate Saliency Maps to highlight the anomaly location in the frame.
