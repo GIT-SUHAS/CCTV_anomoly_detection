@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCTV Anomaly Detection — AI Dashboard</title>
+    <meta name="description" content="Intelligent CCTV surveillance with AI-powered anomaly detection, synthetic data generation, audio-visual fusion, and common sense reasoning.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- ─── SIDEBAR ─── -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">CCTV AI</span>
+                    <span class="logo-subtitle">Anomaly Detection</span>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav-links">
+            <li class="nav-item active" data-section="dashboard">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span>Dashboard</span>
+            </li>
+            <li class="nav-item" data-section="dreaming">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <span>Dreaming Engine</span>
+                <span class="nav-badge">Phase 5</span>
+            </li>
+            <li class="nav-item" data-section="audio-visual">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                <span>Audio-Visual</span>
+                <span class="nav-badge">Phase 6</span>
+            </li>
+            <li class="nav-item" data-section="reasoning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 1 7.38 16.75"/><path d="M12 2a10 10 0 0 0-7.38 16.75"/><circle cx="12" cy="12" r="3"/><path d="M12 8v-2"/><path d="M12 18v-2"/><path d="M8 12H6"/><path d="M18 12h-2"/></svg>
+                <span>Reasoning</span>
+                <span class="nav-badge">Phase 7</span>
+            </li>
+            <li class="nav-item" data-section="pipeline">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>Full Pipeline</span>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="system-status" id="system-status-indicator">
+                <div class="status-dot"></div>
+                <span>System Initializing…</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ─── MAIN CONTENT ─── -->
+    <main class="main-content">
+
+        <!-- ═══════ DASHBOARD ═══════ -->
+        <section id="section-dashboard" class="section active">
+            <div class="section-header">
+                <div>
+                    <h1>System Dashboard</h1>
+                    <p class="section-subtitle">Real-time monitoring and module status</p>
+                </div>
+                <button class="btn btn-primary" id="btn-init-all" onclick="initAllModules()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                    Initialize All Modules
+                </button>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V15M9 21H5a2 2 0 0 1-2-2V15m0 0h18"/></svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-total">0</span>
+                        <span class="stat-label">Total Alerts</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-suppressed">0</span>
+                        <span class="stat-label">Suppressed</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-confirmed">0</span>
+                        <span class="stat-label">Confirmed</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-escalated">0</span>
+                        <span class="stat-label">Escalated</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module Status Cards -->
+            <h2 class="subsection-title">Module Status</h2>
+            <div class="module-grid">
+                <div class="module-card" id="module-dreaming">
+                    <div class="module-header">
+                        <span class="module-phase">Phase 5</span>
+                        <div class="module-status-dot" id="status-dreaming"></div>
+                    </div>
+                    <h3>Dreaming Engine</h3>
+                    <p>Digital Twin synthetic anomaly generation using OpenCV compositing and Stable Diffusion.</p>
+                    <div class="module-features">
+                        <span class="feature-tag">🔥 Fire</span>
+                        <span class="feature-tag">🧑 Falls</span>
+                        <span class="feature-tag">🕵️ Intruder</span>
+                        <span class="feature-tag">🎒 Objects</span>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="initModule('dreaming')">Initialize</button>
+                </div>
+                <div class="module-card" id="module-audio-visual">
+                    <div class="module-header">
+                        <span class="module-phase">Phase 6</span>
+                        <div class="module-status-dot" id="status-audio-visual"></div>
+                    </div>
+                    <h3>Audio-Visual Fusion</h3>
+                    <p>CLIP-style contrastive model aligning audio and visual streams for cross-modal anomaly detection.</p>
+                    <div class="module-features">
+                        <span class="feature-tag">🔈 Ambient</span>
+                        <span class="feature-tag">😱 Scream</span>
+                        <span class="feature-tag">💥 Glass</span>
+                        <span class="feature-tag">🔫 Gunshot</span>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="initModule('audio_visual')">Initialize</button>
+                </div>
+                <div class="module-card" id="module-reasoning">
+                    <div class="module-header">
+                        <span class="module-phase">Phase 7</span>
+                        <div class="module-status-dot" id="status-reasoning"></div>
+                    </div>
+                    <h3>Reasoning Engine</h3>
+                    <p>LLM-powered common sense reasoning that filters false alarms with contextual intelligence.</p>
+                    <div class="module-features">
+                        <span class="feature-tag">🟢 Suppress</span>
+                        <span class="feature-tag">🟡 Confirm</span>
+                        <span class="feature-tag">🔴 Escalate</span>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="initModule('reasoning')">Initialize</button>
+                </div>
+            </div>
+
+            <!-- Architecture -->
+            <h2 class="subsection-title">System Architecture</h2>
+            <div class="architecture-card glass-card">
+                <div class="arch-flow">
+                    <div class="arch-node">
+                        <div class="arch-icon">🎥</div>
+                        <span>CCTV Feed</span>
+                    </div>
+                    <div class="arch-arrow">→</div>
+                    <div class="arch-node">
+                        <div class="arch-icon">🧠</div>
+                        <span>Conv-LSTM</span>
+                    </div>
+                    <div class="arch-arrow">→</div>
+                    <div class="arch-node">
+                        <div class="arch-icon">🌙</div>
+                        <span>Dreaming</span>
+                    </div>
+                    <div class="arch-arrow">→</div>
+                    <div class="arch-node">
+                        <div class="arch-icon">🔊</div>
+                        <span>Audio-Visual</span>
+                    </div>
+                    <div class="arch-arrow">→</div>
+                    <div class="arch-node">
+                        <div class="arch-icon">💡</div>
+                        <span>Reasoning</span>
+                    </div>
+                    <div class="arch-arrow">→</div>
+                    <div class="arch-node arch-final">
+                        <div class="arch-icon">✅</div>
+                        <span>Decision</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ DREAMING ENGINE ═══════ -->
+        <section id="section-dreaming" class="section">
+            <div class="section-header">
+                <div>
+                    <h1>Digital Twin "Dreaming" Engine</h1>
+                    <p class="section-subtitle">Phase 5 — Generating synthetic anomalies on real CCTV backgrounds</p>
+                </div>
+            </div>
+
+            <div class="dreaming-layout">
+                <!-- Controls -->
+                <div class="control-panel glass-card">
+                    <h3>Generate Anomalies</h3>
+                    <div class="form-group">
+                        <label>Anomaly Type</label>
+                        <div class="anomaly-type-grid" id="anomaly-type-grid">
+                            <button class="type-btn active" data-type="fire" onclick="selectAnomalyType(this)">
+                                <span class="type-icon">🔥</span>
+                                <span class="type-name">Fire</span>
+                            </button>
+                            <button class="type-btn" data-type="fallen_person" onclick="selectAnomalyType(this)">
+                                <span class="type-icon">🧑</span>
+                                <span class="type-name">Fallen Person</span>
+                            </button>
+                            <button class="type-btn" data-type="intruder" onclick="selectAnomalyType(this)">
+                                <span class="type-icon">🕵️</span>
+                                <span class="type-name">Intruder</span>
+                            </button>
+                            <button class="type-btn" data-type="abandoned_object" onclick="selectAnomalyType(this)">
+                                <span class="type-icon">🎒</span>
+                                <span class="type-name">Object</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Number of Frames</label>
+                        <input type="range" id="dream-frames" min="1" max="8" value="4" class="slider"
+                               oninput="document.getElementById('dream-frames-val').textContent = this.value">
+                        <span class="slider-value" id="dream-frames-val">4</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Scene Brightness</label>
+                        <input type="range" id="dream-brightness" min="20" max="80" value="55" class="slider"
+                               oninput="document.getElementById('dream-brightness-val').textContent = (this.value/100).toFixed(2)">
+                        <span class="slider-value" id="dream-brightness-val">0.55</span>
+                    </div>
+                    <button class="btn btn-primary btn-full" id="btn-dream-generate" onclick="generateDream()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                        Generate Anomalies
+                    </button>
+                </div>
+
+                <!-- Results -->
+                <div class="results-panel">
+                    <div class="result-row">
+                        <div class="result-card glass-card">
+                            <h4>Clean Background</h4>
+                            <div class="image-frame" id="dream-bg-frame">
+                                <div class="placeholder-content">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="48" height="48" opacity="0.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                    <p>Click "Generate" to extract background</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-card glass-card">
+                            <h4>Synthetic Anomaly</h4>
+                            <div class="image-frame" id="dream-anomaly-frame">
+                                <div class="placeholder-content">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="48" height="48" opacity="0.3"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                                    <p>Synthetic anomaly will appear here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gallery-section glass-card" id="dream-gallery-section" style="display:none">
+                        <h4>Generated Frames Gallery</h4>
+                        <div class="frame-gallery" id="dream-gallery"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ AUDIO-VISUAL ═══════ -->
+        <section id="section-audio-visual" class="section">
+            <div class="section-header">
+                <div>
+                    <h1>Audio-Visual Cross-Modal Detection</h1>
+                    <p class="section-subtitle">Phase 6 — Detecting anomalies through audio-video disagreement</p>
+                </div>
+            </div>
+
+            <div class="av-layout">
+                <!-- Audio Selection -->
+                <div class="control-panel glass-card">
+                    <h3>Audio Input</h3>
+                    <p class="desc-text">Select an audio type to pair with a calm visual scene. The cross-modal detector checks if audio and video are consistent.</p>
+                    <div class="audio-type-list" id="audio-type-list">
+                        <button class="audio-btn active" data-type="ambient" onclick="selectAudioType(this)">
+                            <span class="audio-icon">🔈</span>
+                            <div class="audio-info">
+                                <span class="audio-name">Ambient Noise</span>
+                                <span class="audio-desc">Normal background — should match</span>
+                            </div>
+                            <span class="expected-badge normal">Normal</span>
+                        </button>
+                        <button class="audio-btn" data-type="scream" onclick="selectAudioType(this)">
+                            <span class="audio-icon">😱</span>
+                            <div class="audio-info">
+                                <span class="audio-name">Scream</span>
+                                <span class="audio-desc">High-pitch distress signal</span>
+                            </div>
+                            <span class="expected-badge anomaly">Anomaly</span>
+                        </button>
+                        <button class="audio-btn" data-type="glass_breaking" onclick="selectAudioType(this)">
+                            <span class="audio-icon">💥</span>
+                            <div class="audio-info">
+                                <span class="audio-name">Glass Breaking</span>
+                                <span class="audio-desc">Impact + high-freq tinkling</span>
+                            </div>
+                            <span class="expected-badge anomaly">Anomaly</span>
+                        </button>
+                        <button class="audio-btn" data-type="gunshot" onclick="selectAudioType(this)">
+                            <span class="audio-icon">🔫</span>
+                            <div class="audio-info">
+                                <span class="audio-name">Gunshot</span>
+                                <span class="audio-desc">Sharp impulse with reverb</span>
+                            </div>
+                            <span class="expected-badge anomaly">Anomaly</span>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary btn-full" onclick="runAudioVisual()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        Run Detection
+                    </button>
+                </div>
+
+                <!-- Results -->
+                <div class="av-results">
+                    <div class="av-visual glass-card">
+                        <h4>Visual Scene</h4>
+                        <div class="image-frame" id="av-frame">
+                            <div class="placeholder-content">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="48" height="48" opacity="0.3"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                                <p>Run detection to see the scene</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="av-waveform glass-card">
+                        <h4>Audio Waveform</h4>
+                        <canvas id="waveform-canvas" width="600" height="120"></canvas>
+                    </div>
+                    <div class="av-metrics">
+                        <div class="metric-card glass-card">
+                            <span class="metric-label">Similarity</span>
+                            <span class="metric-value" id="av-similarity">—</span>
+                            <div class="metric-bar"><div class="metric-fill" id="av-sim-bar" style="width:0%"></div></div>
+                        </div>
+                        <div class="metric-card glass-card">
+                            <span class="metric-label">Z-Score</span>
+                            <span class="metric-value" id="av-zscore">—</span>
+                            <div class="metric-bar"><div class="metric-fill warning" id="av-z-bar" style="width:0%"></div></div>
+                        </div>
+                        <div class="metric-card glass-card">
+                            <span class="metric-label">Severity</span>
+                            <span class="metric-value" id="av-severity">—</span>
+                        </div>
+                    </div>
+                    <div class="av-verdict glass-card" id="av-verdict" style="display:none">
+                        <div class="verdict-icon" id="av-verdict-icon"></div>
+                        <div class="verdict-text">
+                            <span class="verdict-label" id="av-verdict-label"></span>
+                            <span class="verdict-desc" id="av-verdict-desc"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ REASONING ENGINE ═══════ -->
+        <section id="section-reasoning" class="section">
+            <div class="section-header">
+                <div>
+                    <h1>"Common Sense" Reasoning Engine</h1>
+                    <p class="section-subtitle">Phase 7 — Filtering false alarms with contextual intelligence</p>
+                </div>
+            </div>
+
+            <!-- Presets -->
+            <h2 class="subsection-title">Quick Scenarios</h2>
+            <div class="preset-grid" id="preset-grid"></div>
+
+            <!-- Custom Builder + Results -->
+            <div class="reasoning-layout">
+                <div class="control-panel glass-card">
+                    <h3>Custom Scenario</h3>
+                    <div class="form-group">
+                        <label>Alert Type</label>
+                        <select id="reason-alert-type" class="select-input">
+                            <option value="running_person">Running Person</option>
+                            <option value="falling_person">Falling Person</option>
+                            <option value="fighting">Fighting</option>
+                            <option value="loitering">Loitering</option>
+                            <option value="crowd_anomaly">Crowd Anomaly</option>
+                            <option value="intrusion">Intrusion</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <select id="reason-location" class="select-input">
+                            <option value="hallway">Hallway</option>
+                            <option value="parking_lot">Parking Lot</option>
+                            <option value="bus_stop">Bus Stop</option>
+                            <option value="lobby">Lobby</option>
+                            <option value="entrance">Entrance</option>
+                            <option value="stairwell">Stairwell</option>
+                            <option value="outdoor_path">Outdoor Path</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Anomaly Score: <span id="reason-score-val">0.65</span></label>
+                        <input type="range" id="reason-score" min="10" max="99" value="65" class="slider"
+                               oninput="document.getElementById('reason-score-val').textContent = (this.value/100).toFixed(2)">
+                    </div>
+                    <div class="form-group">
+                        <label>Scene Brightness: <span id="reason-bright-val">0.50</span></label>
+                        <input type="range" id="reason-brightness" min="5" max="80" value="50" class="slider"
+                               oninput="document.getElementById('reason-bright-val').textContent = (this.value/100).toFixed(2)">
+                    </div>
+                    <div class="form-group">
+                        <label>Audio-Visual Score: <span id="reason-av-val">0.10</span></label>
+                        <input type="range" id="reason-av-score" min="0" max="100" value="10" class="slider"
+                               oninput="document.getElementById('reason-av-val').textContent = (this.value/100).toFixed(2)">
+                    </div>
+                    <button class="btn btn-primary btn-full" onclick="runReasoning()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                        Process Alert
+                    </button>
+                </div>
+
+                <!-- Decision Display -->
+                <div class="reasoning-result">
+                    <div class="decision-card glass-card" id="decision-card">
+                        <div class="decision-placeholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="64" height="64" opacity="0.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            <p>Run a scenario to see the reasoning decision</p>
+                        </div>
+                    </div>
+                    <div class="context-card glass-card" id="context-card" style="display:none">
+                        <h4>Scene Context Extracted</h4>
+                        <div class="context-grid" id="context-grid"></div>
+                    </div>
+                    <div class="stats-card glass-card" id="reasoning-stats-card" style="display:none">
+                        <h4>Session Statistics</h4>
+                        <div class="mini-stats" id="reasoning-mini-stats"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ FULL PIPELINE ═══════ -->
+        <section id="section-pipeline" class="section">
+            <div class="section-header">
+                <div>
+                    <h1>Full Integration Pipeline</h1>
+                    <p class="section-subtitle">Run all three modules sequentially on a single scenario</p>
+                </div>
+            </div>
+
+            <div class="pipeline-layout">
+                <div class="control-panel glass-card">
+                    <h3>Configure Scenario</h3>
+                    <div class="form-group">
+                        <label>Visual Anomaly Type</label>
+                        <select id="pipe-anomaly" class="select-input">
+                            <option value="intruder">Intruder</option>
+                            <option value="fire">Fire</option>
+                            <option value="fallen_person">Fallen Person</option>
+                            <option value="abandoned_object">Abandoned Object</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Audio Type</label>
+                        <select id="pipe-audio" class="select-input">
+                            <option value="glass_breaking">Glass Breaking</option>
+                            <option value="scream">Scream</option>
+                            <option value="gunshot">Gunshot</option>
+                            <option value="ambient">Ambient (Normal)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <select id="pipe-location" class="select-input">
+                            <option value="hallway">Hallway</option>
+                            <option value="parking_lot">Parking Lot</option>
+                            <option value="bus_stop">Bus Stop</option>
+                            <option value="lobby">Lobby</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-full" id="btn-pipeline-run" onclick="runPipeline()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        Run Full Pipeline
+                    </button>
+                </div>
+
+                <div class="pipeline-results">
+                    <div class="pipeline-steps" id="pipeline-steps">
+                        <div class="pipeline-step glass-card" id="pipe-step-5">
+                            <div class="step-header">
+                                <div class="step-number">1</div>
+                                <div class="step-info">
+                                    <h4>Dreaming Engine</h4>
+                                    <span class="step-phase">Phase 5</span>
+                                </div>
+                                <div class="step-status" id="pipe-status-5">Waiting</div>
+                            </div>
+                            <div class="step-body" id="pipe-body-5">
+                                <p class="step-desc">Generates synthetic anomaly frames on extracted backgrounds</p>
+                            </div>
+                        </div>
+                        <div class="pipeline-connector"><div class="connector-line"></div></div>
+                        <div class="pipeline-step glass-card" id="pipe-step-6">
+                            <div class="step-header">
+                                <div class="step-number">2</div>
+                                <div class="step-info">
+                                    <h4>Audio-Visual Fusion</h4>
+                                    <span class="step-phase">Phase 6</span>
+                                </div>
+                                <div class="step-status" id="pipe-status-6">Waiting</div>
+                            </div>
+                            <div class="step-body" id="pipe-body-6">
+                                <p class="step-desc">Checks audio-video consistency with CLIP-style contrastive model</p>
+                            </div>
+                        </div>
+                        <div class="pipeline-connector"><div class="connector-line"></div></div>
+                        <div class="pipeline-step glass-card" id="pipe-step-7">
+                            <div class="step-header">
+                                <div class="step-number">3</div>
+                                <div class="step-info">
+                                    <h4>Reasoning Engine</h4>
+                                    <span class="step-phase">Phase 7</span>
+                                </div>
+                                <div class="step-status" id="pipe-status-7">Waiting</div>
+                            </div>
+                            <div class="step-body" id="pipe-body-7">
+                                <p class="step-desc">Applies common sense reasoning for final decision</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <span class="loading-text" id="loading-text">Processing…</span>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

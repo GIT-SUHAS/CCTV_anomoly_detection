@@ -1,0 +1,16 @@
+# Core dependencies (existing pipeline + new modules)
+numpy>=1.24.0
+opencv-python>=4.8.0
+torch>=2.0.0
+torchvision>=0.15.0
+scikit-learn>=1.3.0
+
+# Phase 5: Digital Twin Dreaming Engine (optional — for Tier 1 GPU synthesis)
+# Uncomment the following to enable Stable Diffusion-based generation:
+# diffusers>=0.25.0
+# transformers>=4.35.0
+# accelerate>=0.25.0
+
+# Phase 7: Common Sense Reasoning (optional — for LLM-based reasoning)
+# Uncomment the following to enable GPT-4o-mini reasoning:
+# openai>=1.10.0
